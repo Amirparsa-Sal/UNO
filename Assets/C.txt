@@ -1,0 +1,19 @@
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCC                   C
+CCCCCCCCCCCC                      C
+CCCCCCCCCC                        C
+CCCCCCCC       CCCCC              C
+CCCCC       CCC     CCC           C
+CCC       CCC          CC         C
+C        CCC                      C
+C       CCC                       C
+C       CCC                       C
+C       CCC                       C
+C        CCC                      C
+C        CCCC          CC       CCC
+C          CCCCCC   CCC       CCCCC
+C              CCCCC       CCCCCCCC
+C                        CCCCCCCCCC
+C                      CCCCCCCCCCCC
+C                   CCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC

@@ -1,0 +1,19 @@
+SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+SSSSSSSSSSSSS                     S
+SSSSSSSSSS                        S
+SSSSSSSS        SSS               S
+SSSSS      SSSSSS SSSSSS          S
+SSS      SSS          SSSS        S
+S      SSSS           SSSSSS      S
+S      SSS         SSS   SSS      S
+S     SSSS       SSS      SSS     S
+S     SSSS     SSS        SSS     S
+S      SSS   SSS          SSS     S
+S      SSSS SS           SSS      S
+S        SSSS           SS      SSS
+S          SSS       SSS      SSSSS
+S             SSSSSSS      SSSSSSSS
+S                        SSSSSSSSSS
+S                      SSSSSSSSSSSS
+S                   SSSSSSSSSSSSSSS
+SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS

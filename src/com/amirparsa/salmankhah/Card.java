@@ -15,8 +15,6 @@ public class Card {
     private String color;
     //Card sign  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, D, R, C, W
     private char sign;
-    //Is wild?
-    private boolean isWild = false;
 
     static {
         colorCodes = new HashMap<>();
@@ -31,13 +29,10 @@ public class Card {
     public Card() {
         this(null, '\0');
     }
+
     public Card(String color, char sign) {
         this.color = color;
         this.sign = sign;
-        if (sign == 'W' || sign == 'C') {
-            this.isWild = true;
-            this.color = "White";
-        }
     }
 
     public String getPath() {
@@ -93,4 +88,9 @@ public class Card {
         return sign == card.sign && color.equals(card.color);
     }
 
+    public boolean canComeAfter(Card anotherCard) {
+        if(anotherCard instanceof WildCard)
+            return color.equals(((WildCard) anotherCard).getRealColor());
+        return sign == anotherCard.sign || color.equals(anotherCard.color) || isWild();
+    }
 }

@@ -27,7 +27,7 @@ public class Card {
     }
 
     public Card() {
-        this(null, '\0');
+        this("", '\0');
     }
 
     public Card(String color, char sign) {

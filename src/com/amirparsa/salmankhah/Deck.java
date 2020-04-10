@@ -42,12 +42,12 @@ public class Deck {
         return true;
     }
 
-    public void print() {
-        int limit = getSize() / 5;
-        if (getSize() % 5 == 0)
+    public void print(int maxNumberInRow) {
+        int limit = getSize() / maxNumberInRow;
+        if (getSize() % maxNumberInRow == 0)
             limit--;
         for (int count = 0; count <= limit; count++) {
-            int first = count * 5, end = Math.min(first + 5, getSize());
+            int first = count * maxNumberInRow, end = Math.min(first + maxNumberInRow, getSize());
             for (int line = 0; line < 19; line++) {
                 for (int i = first; i < end; i++) {
                     String card = listOfCards.get(i).toString().split("\n")[line];
@@ -56,5 +56,22 @@ public class Deck {
                 System.out.println();
             }
         }
+    }
+
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || this.getClass() != o.getClass())
+            return false;
+        Deck tmp = (Deck) o;
+        if(this.getSize()!=tmp.getSize())
+            return false;
+        for (int i = 0; i < tmp.getSize(); i++)
+            if (searchForCard(tmp.getCards().get(i)) == -1)
+                return false;
+        for (int i = 0; i < this.getSize(); i++)
+            if (tmp.searchForCard(this.getCards().get(i)) == -1)
+                return false;
+        return true;
     }
 }

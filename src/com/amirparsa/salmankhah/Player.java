@@ -9,11 +9,11 @@ abstract public class Player {
     private Deck deck;
 
     public Player(){
-        this("", new Deck());
+        this("");
     }
-    public Player(String name, Deck deck){
+    public Player(String name){
         this.name = name;
-        this.deck = deck;
+        deck = new Deck();
     }
 
     public String getName() {

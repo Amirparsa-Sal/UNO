@@ -11,7 +11,7 @@ public class BotPlayer extends Player{
     }
 
     @Override
-    public void think() {
+    public Card think() {
 
     }
 }

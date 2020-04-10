@@ -11,7 +11,7 @@ public class RealPlayer extends Player {
     }
 
     @Override
-    public void think() {
+    public Card think() {
 
     }
 }

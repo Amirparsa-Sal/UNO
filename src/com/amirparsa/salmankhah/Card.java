@@ -8,8 +8,8 @@ import java.io.FileNotFoundException;
 
 public class Card {
     //Background colors
-    private static HashMap<String, String> colorCodes;
-    //Path of cards
+    public static HashMap<String, String> colorCodes;
+    //Path of cards    size of each card: 35*19
     private final String path = "Assets\\";
     //Card color Red, Green, Blue, Yellow, White
     private String color;
@@ -55,14 +55,6 @@ public class Card {
         this.sign = sign;
     }
 
-    public boolean isWild() {
-        return isWild;
-    }
-
-    public void setWild(boolean wild) {
-        isWild = wild;
-    }
-
     @Override
     public String toString() {
         String output = new String("");
@@ -91,6 +83,6 @@ public class Card {
     public boolean canComeAfter(Card anotherCard) {
         if(anotherCard instanceof WildCard)
             return color.equals(((WildCard) anotherCard).getRealColor());
-        return sign == anotherCard.sign || color.equals(anotherCard.color) || isWild();
+        return sign == anotherCard.sign || color.equals(anotherCard.color);
     }
 }

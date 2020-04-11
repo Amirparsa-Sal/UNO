@@ -1,5 +1,9 @@
 package com.amirparsa.salmankhah;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Scanner;
+
 public class RealPlayer extends Player {
 
     public RealPlayer(){
@@ -11,7 +15,49 @@ public class RealPlayer extends Player {
     }
 
     @Override
-    public Card think() {
-
+    public Card think(Card lastCard) {
+        //show available moves !!!!!!!!!!!!!!
+        Deck availableMoves = availableMoves(lastCard);
+        for(int i=0;i<availableMoves.getSize();i++){
+            String color;
+            String sign = "";
+            Card card = availableMoves.getCards().get(i);
+            sign+=card.getSign();
+            if(card instanceof WildCard){
+                sign = Card.signs.get(sign);
+                color = "Wild";
+            }
+            else{
+                if(sign.equals("R") || sign.equals("S") || sign.equals("D"))
+                    sign = sign = Card.signs.get(sign);
+                color = card.getColor();
+            }
+            System.out.print((i+1) + ")  " + color + "  " + sign);
+            System.out.println();
+        }
+        //getting move
+        Scanner scanner = new Scanner(System.in);
+        int choose = 0;
+        while(choose<1 || choose>availableMoves.getSize()) {
+            System.out.println(getName() + " please enter the number of card:");
+            choose = scanner.nextInt();
+        }
+        Card chosenCard = availableMoves.getCards().get(choose-1);
+        //getting color
+        if(chosenCard instanceof WildCard){
+            String color = "";
+            while(!color.toLowerCase().equals("red") && !color.toLowerCase().equals("green") && !color.toLowerCase().equals("blue") &&  !color.toLowerCase().equals("yellow")) {
+                System.out.println(getName() + " please enter the new color (example: Red):");
+                color = scanner.next();
+            }
+            ((WildCard) chosenCard).setRealColor(color);
+            if(chosenCard.getSign()=='C')
+                ((WildCard) chosenCard).setActive(false);
+        }
+        //remove card
+        for(int i=0;i<getDeck().getCards().size();i++)
+            if(getDeck().getCards().get(i).equals(chosenCard))
+                getDeck().getCards().remove(i);
+        return chosenCard;
     }
 }

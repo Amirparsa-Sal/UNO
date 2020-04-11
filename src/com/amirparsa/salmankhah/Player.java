@@ -49,5 +49,5 @@ abstract public class Player {
         return availableMoves;
     }
 
-    abstract public Card think();
+    abstract public Card think(Card lastCard);
 }

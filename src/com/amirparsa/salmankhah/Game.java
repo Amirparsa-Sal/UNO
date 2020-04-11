@@ -34,25 +34,25 @@ public class Game {
         allCards = new Deck();
         //Adding zeros
         for (int i = 1; i <= 4; i++)
-            allCards.addCard(new Card(colors.get(i), '0'));
+            allCards.addCard(new Card(colors.get(i), '0',false));
 
         for (int count = 0; count < 2; count++) {
             //Adding 1-9
             for (int number = 1; number < 10; number++)
                 for (int i = 1; i <= 4; i++)
-                    allCards.addCard(new Card(colors.get(i), (char) ('0' + number)));
+                    allCards.addCard(new Card(colors.get(i), (char) ('0' + number),false));
 
             //Adding Reverse and Draw
             for (int i = 1; i <= 4; i++) {
-                allCards.addCard(new Card(colors.get(i), 'R'));
-                allCards.addCard(new Card(colors.get(i), 'D'));
-                allCards.addCard(new Card(colors.get(i), 'S');
+                allCards.addCard(new Card(colors.get(i), 'R',false));
+                allCards.addCard(new Card(colors.get(i), 'D',true));
+                allCards.addCard(new Card(colors.get(i), 'S',false));
             }
         }
         //Adding Wilds
         for (int i = 1; i <= 4; i++) {
-            allCards.addCard(new WildCard('C'));
-            allCards.addCard(new WildCard('W'));
+            allCards.addCard(new WildCard('C',false));
+            allCards.addCard(new WildCard('W',true));
         }
     }
 
@@ -127,24 +127,40 @@ public class Game {
         //Queue
         for (int i = 0; i < allCardsSize; i++) {
             cardIndex = random.nextInt(allCardsSize);
-            queue.add(allCards.getCards().get(i));
+            queue.add(allCards.getCards().get(cardIndex));
         }
     }
 
-    public void chooseCardsFromQueue(int number, Player player){
+    public Deck chooseCardsFromQueue(int number, Player player){
+        Deck givenCards = new Deck();
         for(int i=0;i<number;i++){
             Card card = queue.remove();
             player.getDeck().addCard(card);
+            givenCards.addCard(card);
         }
+        return givenCards;
     }
 
     public void penalizePlayer(){
-        if(lastCard instanceof WildCard){
-            chooseCardsFromQueue(penalty, players[turn]);
+        if(lastCard instanceof WildCard || lastCard.getSign()=='D'){
+            Deck givenCards = chooseCardsFromQueue(penalty, players[turn]);
+            lastCard.setActive(false);
+            System.out.println(penalty + " cards added to " + players[turn].getName() + "'s deck!");
+            System.out.println();
+            System.out.println("Given Cards:");
+            givenCards.print(4);
             penalty = 0;
+
         }
-        else
-            chooseCardsFromQueue(1,players[turn]);
+        else {
+            Deck givenCards = chooseCardsFromQueue(1, players[turn]);
+            System.out.println(1 + " card added to " + players[turn].getName() + "'s deck!");
+            System.out.println();
+            System.out.println("Given card:");
+            givenCards.print(4);
+            if(players[turn].availableMoves(lastCard).getSize()!=0)
+                turn--;
+        }
     }
 
     public void playTurn() {
@@ -171,7 +187,9 @@ public class Game {
         if(availableMoves.getSize()==0)
             penalizePlayer();
         else {
-            card = player.think();
+            card = player.think(lastCard);
+            if(lastCard instanceof WildCard)
+                ((WildCard) lastCard).setActive(true);
             queue.add(lastCard.copy());
             lastCard = card;
             if(lastCard instanceof WildCard){
@@ -189,6 +207,10 @@ public class Game {
             }
         }
         turn += direction;
+        if(turn==-1)
+            turn=getNumberOfPlayers()-1;
+        turn %= getNumberOfPlayers();
         System.out.println(line);
     }
 }
+

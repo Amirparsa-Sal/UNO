@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 public class Card {
+    //card signs
+    public static HashMap <String,String> signs;
     //text colors
     public static HashMap<String, String> colorCodes;
     //Background colors
@@ -17,6 +19,8 @@ public class Card {
     private String color;
     //Card sign  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, D, R, S, C, W
     private char sign;
+    //is Active?
+    private boolean active;
 
     static {
         colorCodes = new HashMap<>();
@@ -33,15 +37,29 @@ public class Card {
         backgroundCodes.put("Yellow", "\u001B[103m");
         backgroundCodes.put("White", "\u001B[47m");
         backgroundCodes.put("Reset", "\u001B[0m");
+        signs = new HashMap<>();
+        signs.put("W","+4");
+        signs.put("C","Color");
+        signs.put("D","+2");
+        signs.put("R","Reverse");
+        signs.put("S","Skip");
     }
-
     public Card() {
-        this("", '\0');
+        this("", '\0',false);
     }
 
-    public Card(String color, char sign) {
+    public Card(String color, char sign, boolean active) {
         this.color = color;
         this.sign = sign;
+        this.active = active;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active){
+        this.active = active;
     }
 
     public String getPath() {
@@ -90,16 +108,21 @@ public class Card {
     }
 
     public boolean canComeAfter(Card anotherCard) {
-        if(this instanceof WildCard)
+        if(this instanceof WildCard) {
+            if (this.getSign() == 'W')
+                return true;
+            if(anotherCard.isActive())
+                return false;
             return true;
+        }
         if(anotherCard instanceof WildCard)
-            return color.equals(((WildCard) anotherCard).getRealColor());
-        if(anotherCard.getSign()=='D')
+            return !((WildCard) anotherCard).isActive() && this.getColor().equals(((WildCard) anotherCard).getRealColor());
+        if(anotherCard.getSign()=='D' && anotherCard.isActive())
             return sign=='D';
         return sign == anotherCard.sign || color.equals(anotherCard.color);
     }
 
     public Card copy(){
-        return new Card(color,sign);
+        return new Card(color,sign,active);
     }
 }

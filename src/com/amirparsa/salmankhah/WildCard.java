@@ -8,9 +8,8 @@ public class WildCard extends Card {
         super();
     }
 
-    public WildCard(char sign){
-        this.setSign(sign);
-        this.setColor("White");
+    public WildCard(char sign, boolean active){
+        super("White",sign,active);
     }
 
     public void setRealColor(String realColor) {
@@ -23,6 +22,6 @@ public class WildCard extends Card {
 
     @Override
     public Card copy(){
-        return new WildCard(getSign());
+        return new WildCard(getSign(),isActive());
     }
 }

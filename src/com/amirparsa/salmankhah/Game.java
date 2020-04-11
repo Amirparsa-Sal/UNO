@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Game {
     //seperator line
-    private static final String line = Card.backgroundCodes.get("Green") + "                                             " +
+    private static final String line = Card.backgroundCodes.get("Green") + "                                                                                      " +
             Card.backgroundCodes.get("Reset");
     //Colors set
     public static final HashMap<Integer, String> colors;
@@ -203,7 +203,7 @@ public class Game {
                 else if(lastCard.getSign()=='D')
                     penalty+=2;
                 else if(lastCard.getSign()=='S')
-                    turn++;
+                    turn+=direction;
             }
         }
         turn += direction;

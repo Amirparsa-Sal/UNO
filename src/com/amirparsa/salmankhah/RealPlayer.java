@@ -50,9 +50,10 @@ public class RealPlayer extends Player {
                 System.out.println(getName() + " please enter the new color (example: Red):");
                 color = scanner.next();
             }
+            color = color.toLowerCase();
+            color = color.substring(0, 1).toUpperCase() + color.substring(1);
             ((WildCard) chosenCard).setRealColor(color);
-            if(chosenCard.getSign()=='C')
-                ((WildCard) chosenCard).setActive(false);
+
         }
         //remove card
         for(int i=0;i<getDeck().getCards().size();i++)

@@ -1,6 +1,7 @@
 package com.amirparsa.salmankhah;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 abstract public class Player {
     //Player's name
@@ -42,10 +43,23 @@ abstract public class Player {
     }
 
     public Deck availableMoves(Card lastCard){
+        boolean wilds=true;
         Deck availableMoves = new Deck();
-        for(Card card : deck.getCards())
-            if(card.canComeAfter(lastCard))
+        for(Card card : deck.getCards()) {
+            if (card.canComeAfter(lastCard)) {
                 availableMoves.addCard(card);
+                if(!(card instanceof WildCard))
+                    wilds = false;
+            }
+        }
+        if(!wilds){
+            Iterator<Card> it = availableMoves.getCards().iterator();
+            while(it.hasNext()){
+                Card card = it.next();
+                if(card.getSign()=='W')
+                    it.remove();
+            }
+        }
         return availableMoves;
     }
 

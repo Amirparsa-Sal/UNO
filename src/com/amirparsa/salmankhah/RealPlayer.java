@@ -15,7 +15,8 @@ public class RealPlayer extends Player {
     }
 
     @Override
-    public Card think(Card lastCard) {
+    public Card think() {
+        Card lastCard = getGame().getLastCard();
         //show available moves
         Deck availableMoves = availableMoves(lastCard);
         for(int i=0;i<availableMoves.getSize();i++){
@@ -58,12 +59,7 @@ public class RealPlayer extends Player {
 
         }
         //remove card
-        for(int i=0;i<getDeck().getCards().size();i++) {
-            if (getDeck().getCards().get(i).equals(chosenCard)) {
-                getDeck().getCards().remove(i);
-                break;
-            }
-        }
+        getDeck().getCards().remove(chosenCard);
         return chosenCard;
     }
 }

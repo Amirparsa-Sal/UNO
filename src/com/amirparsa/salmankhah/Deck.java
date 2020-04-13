@@ -1,6 +1,7 @@
 package com.amirparsa.salmankhah;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Deck {
     //List of cards
@@ -42,6 +43,17 @@ public class Deck {
         return true;
     }
 
+    public Deck filter(String color){
+        Deck deck = copy();
+        Iterator<Card> it = deck.getCards().iterator();
+        while(it.hasNext()){
+            String clr = it.next().getColor();
+            if(!color.equals(clr))
+                it.remove();
+        }
+        return deck;
+    }
+
     public void print(int maxNumberInRow) {
         int limit = getSize() / maxNumberInRow;
         if (getSize() % maxNumberInRow == 0)
@@ -73,5 +85,12 @@ public class Deck {
             if (tmp.searchForCard(this.getCards().get(i)) == -1)
                 return false;
         return true;
+    }
+
+    public Deck copy(){
+        ArrayList<Card> newList = new ArrayList<>(listOfCards);
+        Deck newDeck = new Deck();
+        newDeck.setCards(newList);
+        return newDeck;
     }
 }

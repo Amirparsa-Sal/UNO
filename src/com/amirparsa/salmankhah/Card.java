@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 public class Card {
+    //card values
+    public static HashMap<Character, Integer> values;
     //card signs
     public static HashMap<String, String> signs;
     //text colors
@@ -23,6 +25,7 @@ public class Card {
     private boolean active;
 
     static {
+        //foreground codes
         colorCodes = new HashMap<>();
         colorCodes.put("Red", "\u001B[31m");
         colorCodes.put("Green", "\u001B[92m");
@@ -30,6 +33,7 @@ public class Card {
         colorCodes.put("Yellow", "\u001B[93m");
         colorCodes.put("White", "\u001B[37m");
         colorCodes.put("Reset", "\u001B[0m");
+        //background colors
         backgroundCodes = new HashMap<>();
         backgroundCodes.put("Red", "\u001B[41m");
         backgroundCodes.put("Green", "\u001B[102m");
@@ -37,12 +41,22 @@ public class Card {
         backgroundCodes.put("Yellow", "\u001B[103m");
         backgroundCodes.put("White", "\u001B[47m");
         backgroundCodes.put("Reset", "\u001B[0m");
+        //signs
         signs = new HashMap<>();
         signs.put("W", "+4");
         signs.put("C", "Color");
         signs.put("D", "+2");
         signs.put("R", "Reverse");
         signs.put("S", "Skip");
+        //values
+        values = new HashMap<>();
+        for (int i = 0; i < 10; i++)
+            values.put((char) ('0' + i), i);
+        values.put('R', 20);
+        values.put('S', 20);
+        values.put('D', 20);
+        values.put('C', 50);
+        values.put('W', 50);
     }
 
     public Card() {
@@ -106,8 +120,8 @@ public class Card {
 
     public boolean canComeAfter(Card anotherCard) {
         if (anotherCard.getSign() == 'D' && anotherCard.isActive()) return sign == 'D';
-        if (this instanceof WildCard){
-            if(this.getSign()=='W')
+        if (this instanceof WildCard) {
+            if (this.getSign() == 'W')
                 return true;
             return !anotherCard.isActive();
         }
@@ -120,12 +134,12 @@ public class Card {
         return new Card(color, sign, active);
     }
 
-    public Card reset(){
-        if(this instanceof WildCard){
+    public Card reset() {
+        if (this instanceof WildCard) {
             ((WildCard) this).setRealColor("");
             this.setColor("White");
         }
-        if(getSign()=='D' || getSign()=='W')
+        if (getSign() == 'D' || getSign() == 'W')
             this.setActive(true);
         return this;
     }

@@ -8,6 +8,8 @@ abstract public class Player {
     private String name;
     //Player's deck
     private Deck deck;
+    //Player's game
+    private Game game;
 
     public Player(){
         this("");
@@ -31,6 +33,14 @@ abstract public class Player {
 
     public void setDeck(Deck deck) {
         this.deck = deck;
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
     }
 
     public boolean equals(Object o){
@@ -63,5 +73,5 @@ abstract public class Player {
         return availableMoves;
     }
 
-    abstract public Card think(Card lastCard);
+    abstract public Card think();
 }

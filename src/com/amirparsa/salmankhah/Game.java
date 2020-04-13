@@ -94,11 +94,12 @@ public class Game {
         return players.length;
     }
 
-//    public void lastCardAction(){
-//        if (lastCard instanceof WildCard){
-//            if(lastCard.getSign()=='W'){
-//        }
-//    }
+    public boolean isInProgress(){
+        for(Player player : players)
+            if(player.getDeck().getSize()==0)
+                return false;
+        return true;
+    }
 
     public void init() {
         Random random = new Random();
@@ -131,7 +132,7 @@ public class Game {
         }
     }
 
-    public Deck chooseCardsFromQueue(int number, Player player){
+    private Deck chooseCardsFromQueue(int number, Player player){
         Deck givenCards = new Deck();
         for(int i=0;i<number;i++){
             Card card = queue.remove();
@@ -141,8 +142,8 @@ public class Game {
         return givenCards;
     }
 
-    public void penalizePlayer(){
-        if(lastCard instanceof WildCard || lastCard.getSign()=='D'){
+    private void penalizePlayer(){
+        if(lastCard.getSign()=='W' || lastCard.getSign()=='D'){
             Deck givenCards = chooseCardsFromQueue(penalty, players[turn]);
             lastCard.setActive(false);
             System.out.println(penalty + " cards added to " + players[turn].getName() + "'s deck!");
@@ -163,8 +164,26 @@ public class Game {
         }
     }
 
+    private void showNumberOfCards(){
+        System.out.println("Number of cards:");
+        for(int i=0;i<getNumberOfPlayers();i++){
+            Player player = players[i];
+            System.out.print(player.getName() + "(" + player.getDeck().getSize() + ")" + "  ");
+        }
+        System.out.println();
+    }
+
+    private void showDirection(){
+        System.out.print("Direction: ");
+        if(direction==1)
+            System.out.println(">>>>>>>>>>>>>>>>>");
+        else
+            System.out.println("<<<<<<<<<<<<<<<<<");
+    }
+
     public void playTurn() {
-        System.out.println("Game Players:");
+        //print info
+        System.out.println("Players:");
         Player player = players[turn];
         for (int i = 0; i < getNumberOfPlayers(); i++) {
             String color = "";
@@ -173,6 +192,9 @@ public class Game {
             System.out.print(color + players[i].getName() + Card.backgroundCodes.get("Reset") + "  ");
         }
         System.out.println();
+        showDirection();
+        System.out.println();
+        showNumberOfCards();
         System.out.println();
         System.out.println("It's " + player.getName() + "'s turn!");
         System.out.println(player.getName() + "'s Deck:");
@@ -185,12 +207,11 @@ public class Game {
         Card card;
         Deck availableMoves = player.availableMoves(lastCard);
         if(availableMoves.getSize()==0)
+            //if player doesnt have any choice
             penalizePlayer();
         else {
             card = player.think(lastCard);
-            if(lastCard instanceof WildCard)
-                ((WildCard) lastCard).setActive(true);
-            queue.add(lastCard.copy());
+            queue.add(lastCard.copy().reset());
             lastCard = card;
             if(lastCard instanceof WildCard){
                 if(lastCard.getSign()=='W')

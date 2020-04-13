@@ -10,7 +10,7 @@ public class Main {
         game.setPlayer(2);
         game.setPlayer(3);
         game.init();
-        while (true)
+        while (game.isInProgress())
             game.playTurn();
     }
 }

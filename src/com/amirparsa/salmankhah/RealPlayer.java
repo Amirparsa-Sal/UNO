@@ -16,7 +16,7 @@ public class RealPlayer extends Player {
 
     @Override
     public Card think(Card lastCard) {
-        //show available moves !!!!!!!!!!!!!!
+        //show available moves
         Deck availableMoves = availableMoves(lastCard);
         for(int i=0;i<availableMoves.getSize();i++){
             String color;
@@ -43,8 +43,10 @@ public class RealPlayer extends Player {
             choose = scanner.nextInt();
         }
         Card chosenCard = availableMoves.getCards().get(choose-1);
-        //getting color
+        //getting color if the card is wild
         if(chosenCard instanceof WildCard){
+            if(chosenCard.getSign()=='W')
+                chosenCard.setActive(true);
             String color = "";
             while(!color.toLowerCase().equals("red") && !color.toLowerCase().equals("green") && !color.toLowerCase().equals("blue") &&  !color.toLowerCase().equals("yellow")) {
                 System.out.println(getName() + " please enter the new color (example: Red):");
@@ -56,9 +58,12 @@ public class RealPlayer extends Player {
 
         }
         //remove card
-        for(int i=0;i<getDeck().getCards().size();i++)
-            if(getDeck().getCards().get(i).equals(chosenCard))
+        for(int i=0;i<getDeck().getCards().size();i++) {
+            if (getDeck().getCards().get(i).equals(chosenCard)) {
                 getDeck().getCards().remove(i);
+                break;
+            }
+        }
         return chosenCard;
     }
 }

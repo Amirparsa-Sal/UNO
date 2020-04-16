@@ -75,6 +75,7 @@ public class Deck {
             return true;
         if (o == null || this.getClass() != o.getClass())
             return false;
+        //checking equality of two decks
         Deck tmp = (Deck) o;
         if(this.getSize()!=tmp.getSize())
             return false;

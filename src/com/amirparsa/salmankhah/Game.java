@@ -153,19 +153,12 @@ public class Game {
             }
         }
         //Last card
-        lastCard = new WildCard();
-        while (lastCard instanceof WildCard) {
+        lastCard = new WildCard('W',true);
+        while (lastCard.getSign()=='W') {
             cardIndex = random.nextInt(allCardsSize);
             lastCard = allCards.getCards().get(cardIndex);
         }
-        if (lastCard.getSign() == 'D')
-            penalty += 2;
-        else if (lastCard.getSign() == 'R') {
-            direction *= -1;
-            changeDirection();
-        }
-        else if (lastCard.getSign()== 'S')
-            turn = turns.get(turn);
+        checkCardAction(lastCard,0);
         allCardsSize--;
         //Queue
         for (int i = 0; i < allCardsSize; i++) {
@@ -193,6 +186,11 @@ public class Game {
             System.out.println("Given Cards:");
             givenCards.print(4);
             penalty = 0;
+            BotPlayer.cons.get(turn).replace("Red",false);
+            BotPlayer.cons.get(turn).replace("Green",false);
+            BotPlayer.cons.get(turn).replace("Blue",false);
+            BotPlayer.cons.get(turn).replace("Yellow",false);
+            BotPlayer.cons.get(turn).replace("White",false);
 
         } else {
             BotPlayer.cons.get(turn).replace(lastCard.getColor(),true);
@@ -228,6 +226,24 @@ public class Game {
             System.out.println("<<<<<<<<<<<<<<<<<");
     }
 
+    public void checkCardAction(Card card,int playerNumber){
+        if(card instanceof WildCard) {
+            if (card.getSign() == 'W') {
+                penalty += 4;
+                card.setActive(true);
+            }
+            String chosenColor = players[playerNumber].chooseColor();
+            ((WildCard) card).setRealColor(chosenColor);
+        }
+        else if (card.getSign() == 'R') {
+            direction *= -1;
+            changeDirection();
+        }else if (card.getSign() == 'D')
+            penalty += 2;
+        else if (card.getSign() == 'S')
+            turn = turns.get(turn);
+    }
+
     public void playTurn() {
         //print info
         System.out.println("Players:");
@@ -260,19 +276,9 @@ public class Game {
             card = player.think();
             queue.add(lastCard.copy().reset());
             lastCard = card;
-            if (lastCard instanceof WildCard) {
-                if (lastCard.getSign() == 'W')
-                    penalty += 4;
-                lastCard.setColor(((WildCard) lastCard).getRealColor());
-            } else {
-                if (lastCard.getSign() == 'R') {
-                    direction *= -1;
-                    changeDirection();
-                }else if (lastCard.getSign() == 'D')
-                    penalty += 2;
-                else if (lastCard.getSign() == 'S')
-                    turn = turns.get(turn);
-            }
+            if(players[turn].getDeck().getSize()==0)
+                return;
+            checkCardAction(lastCard,turn);
         }
         turn = turns.get(turn);
         System.out.println(line);

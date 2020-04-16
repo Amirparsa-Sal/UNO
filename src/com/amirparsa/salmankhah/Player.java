@@ -74,4 +74,6 @@ abstract public class Player {
     }
 
     abstract public Card think();
+
+    abstract public String chooseColor();
 }

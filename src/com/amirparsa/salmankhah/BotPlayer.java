@@ -102,23 +102,25 @@ public class BotPlayer extends Player {
             System.out.println(cardColor + " " + sign);
         }
         System.out.println();
-        if (card instanceof WildCard) {
-            System.out.println("Choosing color...");
-            ArrayList<Deck> filteredDeck = new ArrayList<>();
-            int mx = 0;
-            int chosenColor = 0;
-            for (int i = 0; i < 4; i++) {
-                if (getDeck().filter(BotPlayer.colors.get(i)).getSize() > mx) {
-                    chosenColor = i;
-                    mx = getDeck().filter(BotPlayer.colors.get(i)).getSize();
-                }
-            }
-            ((WildCard) card).setRealColor(BotPlayer.colors.get(chosenColor));
-            System.out.println("Chosen color: " + BotPlayer.colors.get(chosenColor));
-        }
         //remove card
         getDeck().removeCard(card);
         return card;
     }
+
+    @Override
+    public String chooseColor() {
+        System.out.println(getName() + " is choosing color...");
+        ArrayList<Deck> filteredDeck = new ArrayList<>();
+        int mx = 0;
+        int chosenColor = 0;
+        for (int i = 0; i < 4; i++) {
+            if (getDeck().filter(BotPlayer.colors.get(i)).getSize() > mx) {
+                chosenColor = i;
+                mx = getDeck().filter(BotPlayer.colors.get(i)).getSize();
+            }
+        }
+        System.out.println("Chosen color: " + BotPlayer.colors.get(chosenColor));
+        return BotPlayer.colors.get(chosenColor);
+    }
 }
-//remove
+

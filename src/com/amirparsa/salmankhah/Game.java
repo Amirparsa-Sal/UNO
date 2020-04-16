@@ -119,16 +119,15 @@ public class Game {
         return turns;
     }
 
-    public void changeDirection(){
-        if(direction==1){
+    public void changeDirection() {
+        if (direction == 1) {
             for (int i = 0; i < getNumberOfPlayers() - 1; i++)
                 turns.put(i, i + 1);
             turns.put(getNumberOfPlayers() - 1, 0);
-        }
-        else{
-            for (int i = getNumberOfPlayers()-1; i > 0; i--)
+        } else {
+            for (int i = getNumberOfPlayers() - 1; i > 0; i--)
                 turns.put(i, i - 1);
-            turns.put(0, getNumberOfPlayers()-1);
+            turns.put(0, getNumberOfPlayers() - 1);
         }
     }
 
@@ -153,12 +152,14 @@ public class Game {
             }
         }
         //Last card
-        lastCard = new WildCard('W',true);
-        while (lastCard.getSign()=='W') {
+        lastCard = new WildCard('W', true);
+        while (lastCard.getSign() == 'W') {
             cardIndex = random.nextInt(allCardsSize);
             lastCard = allCards.getCards().get(cardIndex);
         }
-        checkCardAction(lastCard,0);
+        if (lastCard.getSign() == 'C')
+            System.out.println("First card is a color card.\n");
+        checkCardAction(lastCard, 0);
         allCardsSize--;
         //Queue
         for (int i = 0; i < allCardsSize; i++) {
@@ -186,14 +187,14 @@ public class Game {
             System.out.println("Given Cards:");
             givenCards.print(4);
             penalty = 0;
-            BotPlayer.cons.get(turn).replace("Red",false);
-            BotPlayer.cons.get(turn).replace("Green",false);
-            BotPlayer.cons.get(turn).replace("Blue",false);
-            BotPlayer.cons.get(turn).replace("Yellow",false);
-            BotPlayer.cons.get(turn).replace("White",false);
+            BotPlayer.cons.get(turn).replace("Red", false);
+            BotPlayer.cons.get(turn).replace("Green", false);
+            BotPlayer.cons.get(turn).replace("Blue", false);
+            BotPlayer.cons.get(turn).replace("Yellow", false);
+            BotPlayer.cons.get(turn).replace("White", false);
 
         } else {
-            BotPlayer.cons.get(turn).replace(lastCard.getColor(),true);
+            BotPlayer.cons.get(turn).replace(lastCard.getColor(), true);
             Deck givenCards = chooseCardsFromQueue(1, players[turn]);
             System.out.println(1 + " card added to " + players[turn].getName() + "'s deck!");
             System.out.println();
@@ -203,7 +204,7 @@ public class Game {
                 direction *= -1;
                 changeDirection();
                 turn = turns.get(turn);
-                direction *=-1;
+                direction *= -1;
                 changeDirection();
             }
         }
@@ -226,22 +227,46 @@ public class Game {
             System.out.println("<<<<<<<<<<<<<<<<<");
     }
 
-    public void checkCardAction(Card card,int playerNumber){
-        if(card instanceof WildCard) {
+    public void checkCardAction(Card card, int playerNumber) {
+        if (card instanceof WildCard) {
             if (card.getSign() == 'W') {
                 penalty += 4;
                 card.setActive(true);
             }
             String chosenColor = players[playerNumber].chooseColor();
             ((WildCard) card).setRealColor(chosenColor);
-        }
-        else if (card.getSign() == 'R') {
+        } else if (card.getSign() == 'R') {
             direction *= -1;
             changeDirection();
-        }else if (card.getSign() == 'D')
+        } else if (card.getSign() == 'D') {
             penalty += 2;
-        else if (card.getSign() == 'S')
+            card.setActive(true);
+        } else if (card.getSign() == 'S')
             turn = turns.get(turn);
+    }
+
+    public void showScores() {
+        int[] scores = new int[getNumberOfPlayers()];
+        int[] playerNumbers = new int[getNumberOfPlayers()];
+        for (int i = 0; i < scores.length; i++) {
+            scores[i] = players[i].getScore();
+            playerNumbers[i] = i;
+        }
+        for (int i = 0; i < scores.length; i++) {
+            for (int j = i + 1; j < scores.length; j++) {
+                if (scores[j] < scores[j - 1]) {
+                    int tmp = scores[j - 1];
+                    scores[j - 1] = scores[j];
+                    scores[j] = tmp;
+                    tmp = playerNumbers[j - 1];
+                    playerNumbers[j - 1] = playerNumbers[j];
+                    playerNumbers[j] = tmp;
+                }
+            }
+        }
+        System.out.println("Final result:  (Player    Score)");
+        for (int i = 0; i < scores.length; i++)
+            System.out.println((i + 1) + ") " + players[playerNumbers[i]].getName() + "  " + scores[i]);
     }
 
     public void playTurn() {
@@ -276,9 +301,9 @@ public class Game {
             card = player.think();
             queue.add(lastCard.copy().reset());
             lastCard = card;
-            if(players[turn].getDeck().getSize()==0)
+            if (players[turn].getDeck().getSize() == 0)
                 return;
-            checkCardAction(lastCard,turn);
+            checkCardAction(lastCard, turn);
         }
         turn = turns.get(turn);
         System.out.println(line);

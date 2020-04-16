@@ -73,6 +73,13 @@ abstract public class Player {
         return availableMoves;
     }
 
+    public int getScore(){
+        int score = 0;
+        for(Card card : deck.getCards())
+            score += Card.values.get(card.getSign());
+        return score;
+    }
+
     abstract public Card think();
 
     abstract public String chooseColor();

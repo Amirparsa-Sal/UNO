@@ -3,8 +3,15 @@ package com.amirparsa.salmankhah;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Represents a bot player.
+ * @author Amirparsa Salmankhah
+ * @version 1.0.0
+ */
 public class BotPlayer extends Player {
+    //list of other players cons.
     public static ArrayList<HashMap<String, Boolean>> cons;
+    //HashMap of corresponding numbers and colors.
     private static HashMap<Integer, String> colors;
 
     static {
@@ -26,18 +33,30 @@ public class BotPlayer extends Player {
         colors.put(4, "White");
     }
 
+    /**
+     * Constructor with no parameter.
+     */
     public BotPlayer() {
         super();
     }
 
+    /**
+     * Constructor with one parameter.
+     * @param name Bot's name
+     */
     public BotPlayer(String name) {
         super(name);
     }
 
+    /**
+     * Chooses player's card to play.
+     * @return The chosen card.
+     */
     @Override
     public Card think() {
         Card lastCard = getGame().getLastCard();
         HashMap<Integer, Integer> turns = getGame().getTurns();
+        //determining next players
         int turn = getGame().getTurn();
         int nextTurn = turns.get(turn);
         int doubleNextTurn = turns.get(nextTurn);
@@ -79,7 +98,7 @@ public class BotPlayer extends Player {
                 max = filteredCards.get(i).getSize();
             }
         }
-        //choose best card
+        //choosing the best card
         int value = -1;
         Card card = null;
         for (int i = 0; i < max; i++) {
@@ -90,33 +109,36 @@ public class BotPlayer extends Player {
             }
         }
         //printing bot choice
-        String sign = "" + card.getSign();
+        char sign = card.getSign();
         String cardColor;
         System.out.print("Chosen Card: ");
+        String descreption =  Card.signs.get(sign);
         if (card instanceof WildCard)
-            System.out.print("Wild " + Card.signs.get(sign));
+            cardColor = "Wild";
         else {
-            if (sign.equals("R") || sign.equals("S") || sign.equals("D"))
-                sign = Card.signs.get(sign);
             cardColor = card.getColor();
-            System.out.println(cardColor + " " + sign);
         }
+        System.out.println(cardColor + " " + descreption);
         System.out.println();
         //remove card
         getDeck().removeCard(card);
         return card;
     }
 
+    /**
+     * Chooses bot's color to be played after WildCards.
+     * @return The chosen color
+     */
     @Override
     public String chooseColor() {
         System.out.println(getName() + " is choosing color...");
         ArrayList<Deck> filteredDeck = new ArrayList<>();
-        int mx = 0;
+        int max = 0;
         int chosenColor = 0;
         for (int i = 0; i < 4; i++) {
-            if (getDeck().filter(BotPlayer.colors.get(i)).getSize() > mx) {
+            if (getDeck().filter(BotPlayer.colors.get(i)).getSize() > max) {
                 chosenColor = i;
-                mx = getDeck().filter(BotPlayer.colors.get(i)).getSize();
+                max = getDeck().filter(BotPlayer.colors.get(i)).getSize();
             }
         }
         System.out.println("Chosen color: " + BotPlayer.colors.get(chosenColor));

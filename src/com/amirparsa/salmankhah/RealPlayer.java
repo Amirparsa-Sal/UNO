@@ -3,16 +3,32 @@ package com.amirparsa.salmankhah;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+/**
+ * Represents a real player.
+ * @author Amirparsa Salmankhah
+ * @version 1.0.0
+ */
 public class RealPlayer extends Player {
 
+    /**
+     * Constructor with no parameter.
+     */
     public RealPlayer() {
         super();
     }
 
+    /**
+     * Constructor with 1 parameter.
+     * @param name Player's name
+     */
     public RealPlayer(String name) {
         super(name);
     }
 
+    /**
+     * Chooses player's card to play.
+     * @return The chosen card.
+     */
     @Override
     public Card think() {
         Card lastCard = getGame().getLastCard();
@@ -20,18 +36,14 @@ public class RealPlayer extends Player {
         Deck availableMoves = availableMoves(lastCard);
         for (int i = 0; i < availableMoves.getSize(); i++) {
             String color;
-            String sign = "";
             Card card = availableMoves.getCards().get(i);
-            sign += card.getSign();
-            if (card instanceof WildCard) {
-                sign = Card.signs.get(sign);
+            char sign = card.getSign();
+            String descreption = Card.signs.get(sign);;
+            if (card instanceof WildCard)
                 color = "Wild";
-            } else {
-                if (sign.equals("R") || sign.equals("S") || sign.equals("D"))
-                    sign = sign = Card.signs.get(sign);
+            else
                 color = card.getColor();
-            }
-            System.out.print((i + 1) + ")  " + color + "  " + sign);
+            System.out.print((i + 1) + ")  " + color + "  " + descreption);
             System.out.println();
         }
         //getting move
@@ -54,6 +66,10 @@ public class RealPlayer extends Player {
         return chosenCard;
     }
 
+    /**
+     * Chooses player's color to be played after WildCards.
+     * @return The chosen color
+     */
     @Override
     public String chooseColor() {
         Scanner scanner = new Scanner(System.in);

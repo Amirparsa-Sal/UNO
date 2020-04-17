@@ -6,8 +6,13 @@ import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.Random;
 
+/**
+ * Represents an UNO game.
+ * @author Amirparsa Salmankhah
+ * @version 1.0.0
+ */
 public class Game {
-    //seperator line
+    //a line for design
     private static final String line = Card.backgroundCodes.get("Green") + "                                                                                      " +
             Card.backgroundCodes.get("Reset");
     //Colors set
@@ -18,11 +23,11 @@ public class Game {
     private Player[] players;
     //Cards Queue
     private Queue<Card> queue;
-    //LAST Card
+    //Last card
     private Card lastCard;
     //turns
     public HashMap<Integer, Integer> turns;
-    //turn
+    //turn number
     private int turn;
     //direction of the game
     private int direction;
@@ -38,7 +43,7 @@ public class Game {
         colors.put(4, "Yellow");
         //init cards
         allCards = new Deck();
-        //Adding zeros
+        //Adding 4 zeros
         for (int i = 1; i <= 4; i++)
             allCards.addCard(new Card(colors.get(i), '0', false));
 
@@ -62,6 +67,10 @@ public class Game {
         }
     }
 
+    /**
+     * Constructor with 1 parameter.
+     * @param playerNumber Number of the players
+     */
     public Game(int playerNumber) {
         players = new Player[playerNumber];
         queue = new LinkedList<>();
@@ -69,16 +78,65 @@ public class Game {
         turn = 0;
         direction = 1;
         penalty = 0;
+        //setting turns
         for (int i = 0; i < playerNumber - 1; i++)
             turns.put(i, i + 1);
         turns.put(playerNumber - 1, 0);
 
     }
 
+    /**
+     * Gets game's players.
+     * @return Game's players
+     */
     public Player[] getPlayers() {
         return players;
     }
 
+    /**
+     * Gets number of the players.
+     * @return Number of the players.
+     */
+    public int getNumberOfPlayers() {
+        return players.length;
+    }
+
+    /**
+     * Gets the last card.
+     * @return Last card that is played.
+     */
+    public Card getLastCard() {
+        return lastCard;
+    }
+
+    /**
+     * Gets the turn of playing.
+     * @return Turn of playing
+     */
+    public int getTurn() {
+        return turn;
+    }
+
+    /**
+     * Gets direction of playing.
+     * @return Direction of playing.
+     */
+    public int getDirection() {
+        return direction;
+    }
+
+    /**
+     * Gets turns chain HashMap.
+     * @return Turns HashMap.
+     */
+    public HashMap<Integer, Integer> getTurns() {
+        return turns;
+    }
+
+    /**
+     * Sets a player.
+     * @param playerNumber Number of the player
+     */
     public void setPlayer(int playerNumber) {
         Scanner scanner = new Scanner(System.in);
         String type = "";
@@ -103,27 +161,10 @@ public class Game {
         System.out.println(line);
     }
 
-    public int getNumberOfPlayers() {
-        return players.length;
-    }
-
-    public Card getLastCard() {
-        return lastCard;
-    }
-
-    public int getTurn() {
-        return turn;
-    }
-
-    public int getDirection() {
-        return direction;
-    }
-
-    public HashMap<Integer, Integer> getTurns() {
-        return turns;
-    }
-
-    public void changeDirection() {
+    /**
+     * Changes the turns chain HashMap direction.
+     */
+    private void changeDirection() {
         if (direction == 1) {
             for (int i = 0; i < getNumberOfPlayers() - 1; i++)
                 turns.put(i, i + 1);
@@ -135,6 +176,10 @@ public class Game {
         }
     }
 
+    /**
+     * Checks that the game is in progress or not.
+     * @return true if it is and false if not.
+     */
     public boolean isInProgress() {
         for (Player player : players)
             if (player.getDeck().getSize() == 0)
@@ -142,6 +187,9 @@ public class Game {
         return true;
     }
 
+    /**
+     * initializes the game
+     */
     public void init() {
         Random random = new Random();
         int allCardsSize = 108;
@@ -170,6 +218,12 @@ public class Game {
         }
     }
 
+    /**
+     * Chooses the cards for player's penalty.
+     * @param number Number of penalty
+     * @param player The player
+     * @return Deck of chosen cards
+     */
     private Deck chooseCardsFromQueue(int number, Player player) {
         Deck givenCards = new Deck();
         for (int i = 0; i < number; i++) {
@@ -180,7 +234,11 @@ public class Game {
         return givenCards;
     }
 
+    /**
+     * Penalizes the player which is his turn.
+     */
     private void penalizePlayer() {
+        //if the last card is wild +4 or draw +2
         if ((lastCard.getSign() == 'W' || lastCard.getSign() == 'D') && lastCard.isActive()) {
             Deck givenCards = chooseCardsFromQueue(penalty, players[turn]);
             lastCard.setActive(false);
@@ -195,7 +253,9 @@ public class Game {
             BotPlayer.cons.get(turn).replace("Yellow", false);
             BotPlayer.cons.get(turn).replace("White", false);
 
-        } else {
+        }
+        // if the number of penalty is 1
+        else {
             if(lastCard instanceof WildCard)
                 BotPlayer.cons.get(turn).replace(((WildCard) lastCard).getRealColor(),true);
             else
@@ -215,7 +275,10 @@ public class Game {
         }
     }
 
-    private void showNumberOfCards() {
+    /**
+     * Shows the number of cards of players.
+     */
+    public void showNumberOfCards() {
         System.out.println("Number of cards:");
         for (int i = 0; i < getNumberOfPlayers(); i++) {
             Player player = players[i];
@@ -224,7 +287,10 @@ public class Game {
         System.out.println();
     }
 
-    private void showDirection() {
+    /**
+     * Shows the direction of playing.
+     */
+    public void showDirection() {
         System.out.print("Direction: ");
         if (direction == 1)
             System.out.println(">>>>>>>>>>>>>>>>>");
@@ -232,6 +298,11 @@ public class Game {
             System.out.println("<<<<<<<<<<<<<<<<<");
     }
 
+    /**
+     * Checks and execute actionable cards action.
+     * @param card The card
+     * @param playerNumber Number of the player
+     */
     public void checkCardAction(Card card, int playerNumber) {
         if (card instanceof WildCard) {
             if (card.getSign() == 'W') {
@@ -250,6 +321,9 @@ public class Game {
             turn = turns.get(turn);
     }
 
+    /**
+     * Shows the score of the players.
+     */
     public void showScores() {
         int[] scores = new int[getNumberOfPlayers()];
         int[] playerNumbers = new int[getNumberOfPlayers()];
@@ -274,8 +348,11 @@ public class Game {
             System.out.println((i + 1) + ") " + players[playerNumbers[i]].getName() + "  " + scores[i]);
     }
 
-    public void playTurn() throws InterruptedException {
-        //print info
+    /**
+     * executes one turn of playing.
+     */
+    public void playTurn(){
+        //print players
         System.out.println("Players:");
         Player player = players[turn];
         for (int i = 0; i < getNumberOfPlayers(); i++) {
@@ -285,34 +362,45 @@ public class Game {
             System.out.print(color + players[i].getName() + Card.backgroundCodes.get("Reset") + "  ");
         }
         System.out.println();
+        //print direction of playing
         showDirection();
         System.out.println();
+        //print number of cards of players
         showNumberOfCards();
         System.out.println();
+        //print turn
         System.out.println("It's " + player.getName() + "'s turn!");
         System.out.println(player.getName() + "'s Deck:");
+        //print deck of the player
         player.getDeck().print(4);
         System.out.println();
         System.out.println("Last Card:");
         System.out.println(lastCard);
-        System.out.println();
-        System.out.println();
+        System.out.println("\n");
         Card card;
         Deck availableMoves = player.availableMoves(lastCard);
+        //check if player can play card or not.
         if (availableMoves.getSize() == 0)
             //if player doesnt have any choice
             penalizePlayer();
         else {
+            //if player can play a card
             card = player.think();
-            queue.add(lastCard.copy().reset());
+            queue.add(lastCard.reset());
             lastCard = card;
             if (players[turn].getDeck().getSize() == 0)
                 return;
             checkCardAction(lastCard, turn);
         }
+        //sleep
+        if(players[turn] instanceof BotPlayer) {
+            try {
+                Thread.sleep(1500);
+            } catch (InterruptedException e) {
+                System.exit(-1);
+            }
+        }
         turn = turns.get(turn);
         System.out.println(line);
-        if(players[turn] instanceof BotPlayer)
-            Thread.sleep(1500);
     }
 }

@@ -4,6 +4,11 @@ package com.amirparsa.salmankhah;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+/**
+ * Represents a run class to run UNO.
+ * @author Amirparsa Salmankhah
+ * @version 1.0.0
+ */
 public class Main {
 
     public static void main(String[] args) throws InterruptedException {
@@ -25,7 +30,7 @@ public class Main {
         game.init();
         while (game.isInProgress())
             game.playTurn();
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < n; i++) {
             if (game.getPlayers()[i].getDeck().getSize() == 0) {
                 System.out.println(game.getLastCard());
                 System.out.println();

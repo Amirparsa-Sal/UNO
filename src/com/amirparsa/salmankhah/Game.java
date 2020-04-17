@@ -1,6 +1,10 @@
 package com.amirparsa.salmankhah;
 
-import java.util.*;
+import java.util.Queue;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Scanner;
+import java.util.Random;
 
 public class Game {
     //seperator line
@@ -153,12 +157,10 @@ public class Game {
         }
         //Last card
         lastCard = new WildCard('W', true);
-        while (lastCard.getSign() == 'W') {
+        while (lastCard instanceof WildCard) {
             cardIndex = random.nextInt(allCardsSize);
             lastCard = allCards.getCards().get(cardIndex);
         }
-        if (lastCard.getSign() == 'C')
-            System.out.println("First card is a color card.\n");
         checkCardAction(lastCard, 0);
         allCardsSize--;
         //Queue
@@ -194,7 +196,10 @@ public class Game {
             BotPlayer.cons.get(turn).replace("White", false);
 
         } else {
-            BotPlayer.cons.get(turn).replace(lastCard.getColor(), true);
+            if(lastCard instanceof WildCard)
+                BotPlayer.cons.get(turn).replace(((WildCard) lastCard).getRealColor(),true);
+            else
+                BotPlayer.cons.get(turn).replace(lastCard.getColor(), true);
             Deck givenCards = chooseCardsFromQueue(1, players[turn]);
             System.out.println(1 + " card added to " + players[turn].getName() + "'s deck!");
             System.out.println();
@@ -253,7 +258,7 @@ public class Game {
             playerNumbers[i] = i;
         }
         for (int i = 0; i < scores.length; i++) {
-            for (int j = i + 1; j < scores.length; j++) {
+            for (int j = 1; j < scores.length; j++) {
                 if (scores[j] < scores[j - 1]) {
                     int tmp = scores[j - 1];
                     scores[j - 1] = scores[j];
@@ -269,7 +274,7 @@ public class Game {
             System.out.println((i + 1) + ") " + players[playerNumbers[i]].getName() + "  " + scores[i]);
     }
 
-    public void playTurn() {
+    public void playTurn() throws InterruptedException {
         //print info
         System.out.println("Players:");
         Player player = players[turn];
@@ -307,5 +312,7 @@ public class Game {
         }
         turn = turns.get(turn);
         System.out.println(line);
+        if(players[turn] instanceof BotPlayer)
+            Thread.sleep(1500);
     }
 }

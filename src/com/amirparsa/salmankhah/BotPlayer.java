@@ -93,10 +93,10 @@ public class BotPlayer extends Player {
         String sign = "" + card.getSign();
         String cardColor;
         System.out.print("Chosen Card: ");
-        if(card instanceof WildCard)
+        if (card instanceof WildCard)
             System.out.print("Wild " + Card.signs.get(sign));
-        else{
-            if(sign.equals("R") || sign.equals("S") || sign.equals("D"))
+        else {
+            if (sign.equals("R") || sign.equals("S") || sign.equals("D"))
                 sign = Card.signs.get(sign);
             cardColor = card.getColor();
             System.out.println(cardColor + " " + sign);

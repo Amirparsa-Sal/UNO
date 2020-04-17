@@ -1,16 +1,15 @@
 package com.amirparsa.salmankhah;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class RealPlayer extends Player {
 
-    public RealPlayer(){
+    public RealPlayer() {
         super();
     }
 
-    public RealPlayer(String name){
+    public RealPlayer(String name) {
         super(name);
     }
 
@@ -19,31 +18,37 @@ public class RealPlayer extends Player {
         Card lastCard = getGame().getLastCard();
         //show available moves
         Deck availableMoves = availableMoves(lastCard);
-        for(int i=0;i<availableMoves.getSize();i++){
+        for (int i = 0; i < availableMoves.getSize(); i++) {
             String color;
             String sign = "";
             Card card = availableMoves.getCards().get(i);
-            sign+=card.getSign();
-            if(card instanceof WildCard){
+            sign += card.getSign();
+            if (card instanceof WildCard) {
                 sign = Card.signs.get(sign);
                 color = "Wild";
-            }
-            else{
-                if(sign.equals("R") || sign.equals("S") || sign.equals("D"))
+            } else {
+                if (sign.equals("R") || sign.equals("S") || sign.equals("D"))
                     sign = sign = Card.signs.get(sign);
                 color = card.getColor();
             }
-            System.out.print((i+1) + ")  " + color + "  " + sign);
+            System.out.print((i + 1) + ")  " + color + "  " + sign);
             System.out.println();
         }
         //getting move
         Scanner scanner = new Scanner(System.in);
         int choose = 0;
-        while(choose<1 || choose>availableMoves.getSize()) {
-            System.out.println(getName() + " please enter the number of card:");
-            choose = scanner.nextInt();
+        while (choose < 1 || choose > availableMoves.getSize()) {
+            try {
+                System.out.println(getName() + " please enter the number of card:");
+                choose = scanner.nextInt();
+            }
+            catch(InputMismatchException e){
+                System.out.println("Please enter a valid number!");
+                scanner.next();
+            }
         }
-        Card chosenCard = availableMoves.getCards().get(choose-1);
+        Card chosenCard = availableMoves.getCards().get(choose - 1);
+        System.out.println();
         //remove card
         getDeck().removeCard(chosenCard);
         return chosenCard;
@@ -53,7 +58,7 @@ public class RealPlayer extends Player {
     public String chooseColor() {
         Scanner scanner = new Scanner(System.in);
         String color = "";
-        while(!color.toLowerCase().equals("red") && !color.toLowerCase().equals("green") && !color.toLowerCase().equals("blue") &&  !color.toLowerCase().equals("yellow")) {
+        while (!color.toLowerCase().equals("red") && !color.toLowerCase().equals("green") && !color.toLowerCase().equals("blue") && !color.toLowerCase().equals("yellow")) {
             System.out.println(getName() + " please enter the new color (example: Red):");
             color = scanner.next();
         }

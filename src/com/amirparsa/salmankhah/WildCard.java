@@ -2,14 +2,14 @@ package com.amirparsa.salmankhah;
 
 public class WildCard extends Card {
     //WildCard real color
-    private String realColor=null;
+    private String realColor = null;
 
-    public WildCard(){
+    public WildCard() {
         super();
     }
 
-    public WildCard(char sign, boolean active){
-        super("White",sign,active);
+    public WildCard(char sign, boolean active) {
+        super("White", sign, active);
     }
 
     public void setRealColor(String realColor) {
@@ -21,7 +21,7 @@ public class WildCard extends Card {
     }
 
     @Override
-    public Card copy(){
-        return new WildCard(getSign(),isActive());
+    public Card copy() {
+        return new WildCard(getSign(), isActive());
     }
 }

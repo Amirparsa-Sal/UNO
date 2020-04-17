@@ -6,7 +6,6 @@ import java.util.Iterator;
 public class Deck {
     //List of cards
     private ArrayList<Card> listOfCards;
-    //needs to add player
 
     public Deck() {
         listOfCards = new ArrayList<>();
@@ -43,12 +42,12 @@ public class Deck {
         return true;
     }
 
-    public Deck filter(String color){
+    public Deck filter(String color) {
         Deck deck = copy();
         Iterator<Card> it = deck.getCards().iterator();
-        while(it.hasNext()){
+        while (it.hasNext()) {
             String clr = it.next().getColor();
-            if(!color.equals(clr))
+            if (!color.equals(clr))
                 it.remove();
         }
         return deck;
@@ -77,7 +76,7 @@ public class Deck {
             return false;
         //checking equality of two decks
         Deck tmp = (Deck) o;
-        if(this.getSize()!=tmp.getSize())
+        if (this.getSize() != tmp.getSize())
             return false;
         for (int i = 0; i < tmp.getSize(); i++)
             if (searchForCard(tmp.getCards().get(i)) == -1)
@@ -88,7 +87,7 @@ public class Deck {
         return true;
     }
 
-    public Deck copy(){
+    public Deck copy() {
         ArrayList<Card> newList = new ArrayList<>(listOfCards);
         Deck newDeck = new Deck();
         newDeck.setCards(newList);

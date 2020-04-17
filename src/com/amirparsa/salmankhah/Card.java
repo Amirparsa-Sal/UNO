@@ -1,7 +1,6 @@
 package com.amirparsa.salmankhah;
 
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,8 +14,6 @@ public class Card {
     public static HashMap<String, String> colorCodes;
     //Background colors
     public static HashMap<String, String> backgroundCodes;
-    //Path of cards    size of each card: 35*19
-    private final String path = "Assets\\";
     //Card color Red, Green, Blue, Yellow, White
     private String color;
     //Card sign  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, D, R, S, C, W
@@ -97,6 +94,8 @@ public class Card {
     public String toString() {
         String output = new String("");
         try {
+            //Path of cards    size of each card: 35*19
+            String path = "Assets\\";
             File file = new File(path + sign + ".txt");
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {

@@ -1,6 +1,5 @@
 package com.amirparsa.salmankhah;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 
 abstract public class Player {
@@ -11,10 +10,11 @@ abstract public class Player {
     //Player's game
     private Game game;
 
-    public Player(){
+    public Player() {
         this("");
     }
-    public Player(String name){
+
+    public Player(String name) {
         this.name = name;
         deck = new Deck();
     }
@@ -43,39 +43,39 @@ abstract public class Player {
         this.game = game;
     }
 
-    public boolean equals(Object o){
-        if(this==o)
+    public boolean equals(Object o) {
+        if (this == o)
             return true;
-        if(o==null ||this.getClass()!=o.getClass())
+        if (o == null || this.getClass() != o.getClass())
             return false;
         Player tmp = (Player) o;
-        return name.equals(tmp.name) &&  deck.equals(tmp.deck);
+        return name.equals(tmp.name) && deck.equals(tmp.deck);
     }
 
-    public Deck availableMoves(Card lastCard){
-        boolean wilds=true;
+    public Deck availableMoves(Card lastCard) {
+        boolean wilds = true;
         Deck availableMoves = new Deck();
-        for(Card card : deck.getCards()) {
+        for (Card card : deck.getCards()) {
             if (card.canComeAfter(lastCard)) {
                 availableMoves.addCard(card);
-                if(!(card instanceof WildCard))
+                if (!(card instanceof WildCard))
                     wilds = false;
             }
         }
-        if(!wilds){
+        if (!wilds) {
             Iterator<Card> it = availableMoves.getCards().iterator();
-            while(it.hasNext()){
+            while (it.hasNext()) {
                 Card card = it.next();
-                if(card.getSign()=='W')
+                if (card.getSign() == 'W')
                     it.remove();
             }
         }
         return availableMoves;
     }
 
-    public int getScore(){
+    public int getScore() {
         int score = 0;
-        for(Card card : deck.getCards())
+        for (Card card : deck.getCards())
             score += Card.values.get(card.getSign());
         return score;
     }
